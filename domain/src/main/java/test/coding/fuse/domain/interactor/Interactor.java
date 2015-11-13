@@ -23,7 +23,7 @@ public abstract class Interactor {
     }
 
 
-    protected abstract Observable buildInteractorObservable();
+    public abstract Observable buildInteractorObservable();
 
 
     public void execute(Subscriber interactorSubscriber) {

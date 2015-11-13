@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -17,15 +16,16 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.OnEditorAction;
 import butterknife.OnTextChanged;
-import test.coding.fuse.domain.model.Company;
 import test.coding.fuse.presentation.R;
-import test.coding.fuse.presentation.dagger.entity.InteractorComponent;
 import test.coding.fuse.presentation.dagger.entity.DaggerInteractorComponent;
+import test.coding.fuse.presentation.dagger.entity.InteractorComponent;
+import test.coding.fuse.presentation.model.CompanyModel;
 import test.coding.fuse.presentation.presenter.CompanyPresenter;
 import test.coding.fuse.presentation.view.CompanyView;
 
 public class CompanyActivity extends BaseActivity implements CompanyView {
 
+    public static final String STATE_MODEL_COMPANY = "state_model_company";
     @Bind(R.id.et_company_name)
     AppCompatEditText etCompanyView;
 
@@ -37,6 +37,8 @@ public class CompanyActivity extends BaseActivity implements CompanyView {
     private InteractorComponent interactorComponent;
 
     private boolean backgroundChanged;
+
+    private CompanyModel company;
 
     @OnEditorAction(R.id.et_company_name)
     boolean onEditorAction(TextView view, int actionId, KeyEvent key) {
@@ -78,25 +80,36 @@ public class CompanyActivity extends BaseActivity implements CompanyView {
 
     @Override
     public void onSearchError() {
-        etCompanyView.setTextColor(ContextCompat.getColor(this, android.R.color.holo_red_dark));
+        changeEditTextColor(ContextCompat.getColor(this, android.R.color.holo_red_dark));
     }
 
     @Override
-    public void onSearchSuccess(Company company) {
-        etCompanyView.setTextColor(ContextCompat.getColor(this, android.R.color.holo_green_dark));
-        showLogo(company.getLogo());
+    public void onSearchSuccess(CompanyModel companyModel) {
+        if(companyModel != null) {
+            setCompanyModel(companyModel);
+            changeEditTextColor(ContextCompat.getColor(this, android.R.color.holo_green_dark));
+            showLogo();
+        }
     }
 
-    private void showLogo(String logoURL) {
+    private void changeEditTextColor(int color) {
+        etCompanyView.setTextColor(color);
+    }
+
+    private void setCompanyModel(CompanyModel companyModel) {
+        this.company = companyModel;
+    }
+
+    private void showLogo() {
         imCompanyLogo.setVisibility(View.VISIBLE);
-        Picasso.with(this).load(logoURL).into(imCompanyLogo);
+        Picasso.with(this).load(this.company.getLogo()).into(imCompanyLogo);
     }
 
     @Override
     public void searchReset() {
         backgroundChanged = false;
         imCompanyLogo.setVisibility(View.GONE);
-        etCompanyView.setTextColor(ContextCompat.getColor(this, android.R.color.primary_text_light));
+        changeEditTextColor(ContextCompat.getColor(this, android.R.color.primary_text_light));
     }
 
     @Override
@@ -116,5 +129,19 @@ public class CompanyActivity extends BaseActivity implements CompanyView {
                 .activityModule(getActivityModule())
                 .build();
         interactorComponent.inject(this);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        if(savedInstanceState.containsKey(STATE_MODEL_COMPANY)) {
+            onSearchSuccess((CompanyModel) savedInstanceState.getParcelable(STATE_MODEL_COMPANY));
+        }
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(STATE_MODEL_COMPANY, this.company);
+        super.onSaveInstanceState(outState);
     }
 }

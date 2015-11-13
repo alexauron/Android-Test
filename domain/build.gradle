@@ -1,9 +1,21 @@
 apply plugin: 'java'
 
+configurations {
+    provided
+}
+
+sourceSets {
+    main {
+        compileClasspath += configurations.provided
+    }
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.squareup.retrofit:retrofit:2.0.0-beta2'
 
+    testCompile 'com.crittercism.dexmaker:dexmaker-dx:1.+'
+    testCompile "org.mockito:mockito-core:1.+"
+    testCompile 'junit:junit:4.12'
     compile 'io.reactivex:rxjava:1.0.15'
     compile 'javax.inject:javax.inject:1'
 }

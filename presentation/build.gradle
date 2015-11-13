@@ -40,6 +40,8 @@ dependencies {
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
     androidTestCompile 'com.android.support.test:runner:0.4.1'
     androidTestCompile 'com.android.support:support-annotations:23.1.0'
+    androidTestCompile "org.mockito:mockito-core:1.+"
+    androidTestCompile 'com.google.dexmaker:dexmaker-mockito:1.+'
     compile project(':domain')
     compile project(':data')
 }

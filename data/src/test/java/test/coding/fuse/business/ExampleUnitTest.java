@@ -1,4 +1,4 @@
-package test.coding.fuse.business;
+package test.coding.fuse.data;
 
 import org.junit.Test;
 

@@ -6,7 +6,7 @@ import test.coding.fuse.presentation.model.CompanyModel;
 
 public interface CompanyView {
 
-    void searchCompany();
+    void searchCompany(String s);
     void onSearchError();
     void onSearchSuccess(CompanyModel companyModel);
     void searchReset();

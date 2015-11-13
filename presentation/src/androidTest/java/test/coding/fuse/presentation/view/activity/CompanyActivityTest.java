@@ -26,6 +26,8 @@ import static org.hamcrest.Matchers.not;
 @LargeTest
 public class CompanyActivityTest {
 
+    public static final String MOCK_NAME = "mock";
+    public static final String MOCK_LOGO = "mock";
     @Rule
     public ActivityTestRule<CompanyActivity> mActivityRule = new ActivityTestRule(CompanyActivity.class);
 
@@ -54,9 +56,7 @@ public class CompanyActivityTest {
 
     @UiThreadTest
     public void onSucceedTextIsGreen() {
-        CompanyModel model = new CompanyModel();
-        model.setName("mock");
-        model.setLogo("mock");
+        CompanyModel model = new CompanyModel(MOCK_NAME, MOCK_LOGO);
         mActivityRule.getActivity().onSearchSuccess(model);
         onView(withId(R.id.et_company_name)).check(matches(
                 EspressoHelper.withCurrentTextColor(ContextCompat.getColor(
@@ -72,9 +72,7 @@ public class CompanyActivityTest {
 
     @UiThreadTest
     public void suceedShowImage() {
-        CompanyModel model = new CompanyModel();
-        model.setName("mock");
-        model.setLogo("mock");
+        CompanyModel model = new CompanyModel(MOCK_NAME, MOCK_LOGO);
         mActivityRule.getActivity().onSearchSuccess(model);
         onView(withId(R.id.im_company_logo)).check(matches(isDisplayed()));
     }

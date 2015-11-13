@@ -1,4 +1,4 @@
-package test.coding.fuse.business;
+package test.coding.fuse.data;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

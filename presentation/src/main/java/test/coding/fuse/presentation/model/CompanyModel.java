@@ -8,8 +8,6 @@ public class CompanyModel implements Parcelable {
     private String name;
     private String logo;
 
-    public CompanyModel() {}
-
     public CompanyModel(String name, String logo) {
         this.setName(name);
         this.setLogo(logo);

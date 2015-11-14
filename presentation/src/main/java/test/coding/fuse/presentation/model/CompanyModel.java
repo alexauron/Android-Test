@@ -4,6 +4,9 @@ package test.coding.fuse.presentation.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+/**
+ * Presentation model for Company
+ */
 public class CompanyModel implements Parcelable {
     private String name;
     private String logo;

@@ -33,4 +33,5 @@ public class InteractorModule {
             Scheduler uiThread) {
         return new SearchCompanyInteractor(companyRepository, executionThread, uiThread);
     }
+
 }

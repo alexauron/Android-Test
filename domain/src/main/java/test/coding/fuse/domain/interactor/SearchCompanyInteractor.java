@@ -7,12 +7,14 @@ import javax.inject.Inject;
 
 import rx.Observable;
 import rx.Scheduler;
+import test.coding.fuse.domain.exception.ModelDataValidationException;
+import test.coding.fuse.domain.model.Company;
 import test.coding.fuse.domain.repository.CompanyRepository;
 
 public class SearchCompanyInteractor extends Interactor {
 
     private final CompanyRepository companyRepository;
-    private String companyName;
+    private Company company;
 
     @Inject
     public SearchCompanyInteractor(CompanyRepository companyRepository, Executor executionThread,
@@ -22,11 +24,17 @@ public class SearchCompanyInteractor extends Interactor {
     }
 
     @Override
-    protected Observable buildInteractorObservable() {
-        return this.companyRepository.searchCompany(companyName);
+    public Observable buildInteractorObservable() {
+        Observable observable;
+        if(company.validate()) {
+            observable = this.companyRepository.searchCompany(company.getName());
+        } else {
+            observable = Observable.error(new ModelDataValidationException("Company name not valid"));
+        }
+        return observable;
     }
 
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
+    public void setCompany(Company company) {
+        this.company = company;
     }
 }

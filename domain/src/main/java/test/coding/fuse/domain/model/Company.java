@@ -25,4 +25,8 @@ public class Company {
     public void setLogo(String logo) {
         this.logo = logo;
     }
+
+    public boolean validate() {
+        return !this.getName().trim().isEmpty();
+    }
 }

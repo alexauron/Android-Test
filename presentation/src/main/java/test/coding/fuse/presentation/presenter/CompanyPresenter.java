@@ -11,6 +11,8 @@ import test.coding.fuse.domain.interactor.Interactor;
 import test.coding.fuse.domain.interactor.SearchCompanyInteractor;
 import test.coding.fuse.domain.model.Company;
 import test.coding.fuse.presentation.dagger.PerActivity;
+import test.coding.fuse.presentation.mapper.CompanyModelMapper;
+import test.coding.fuse.presentation.model.CompanyModel;
 import test.coding.fuse.presentation.view.CompanyView;
 
 /**
@@ -25,10 +27,13 @@ public class CompanyPresenter implements Presenter {
     private CompanyView view;
 
     private final Interactor getCompanyInteractor;
+    private final CompanyModelMapper companyModelMapper;
 
     @Inject
-    public CompanyPresenter(@Named("searchCompany") Interactor getCompanyInteractor) {
+    public CompanyPresenter(@Named("searchCompany") Interactor getCompanyInteractor,
+                            CompanyModelMapper companyModelMapper) {
         this.getCompanyInteractor = getCompanyInteractor;
+        this.companyModelMapper = companyModelMapper;
     }
 
     public void setView(CompanyView view) {
@@ -53,12 +58,12 @@ public class CompanyPresenter implements Presenter {
         this.view.onSearchError();
     }
 
-    public void showCompany(Company company) {
+    public void showCompany(CompanyModel company) {
         this.view.onSearchSuccess(company);
     }
 
     public void searchCompany(String companyName) {
-        ((SearchCompanyInteractor) getCompanyInteractor).setCompanyName(companyName);
+        ((SearchCompanyInteractor) getCompanyInteractor).setCompany(new Company(companyName, null));
         getCompanyInteractor.execute(new CompanySubscriber());
     }
 
@@ -78,7 +83,7 @@ public class CompanyPresenter implements Presenter {
         @Override
         public void onNext(Company company) {
             Log.d(TAG, "CompanySubscriber | onNext | Company: " + company.getName());
-            CompanyPresenter.this.showCompany(company);
+            CompanyPresenter.this.showCompany(companyModelMapper.parse(company));
         }
     }
 }

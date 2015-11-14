@@ -20,6 +20,17 @@ allprojects {
     repositories {
         jcenter()
     }
+
+    ext {
+        androidBuildToolsVersion = "23.0.2"
+        androidMinSdkVersion = 10
+        androidTargetSdkVersion = 23
+        androidCompileSdkVersion = 23
+        androidApplicationId = 'test.coding.fuse.fusemobile'
+        androidVersionCode = 1
+        androidVersionName = "1.0"
+        testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
+    }
 }
 
 task clean(type: Delete) {
